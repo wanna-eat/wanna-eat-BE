@@ -1,0 +1,28 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+participant Client
+participant AuthController
+participant AuthService
+participant UserRepository
+participant JwtProvider
+autonumber
+== 로그인 플로우 시작 ==
+
+Client -[#red]> AuthController: PATCH /api/v1/auth/deactivate
+note over Client, AuthController
+     header: Authorization: Bearer {accessToken}
+end note
+AuthController -> AuthService: deactivate(accessToken)
+AuthService -> JwtProvider: validateToken(accessToken)
+AuthService -> AuthService: setDeleteUser(User)
+AuthService -> AuthController: void
+AuthController -> Client: void=
+note over AuthController, Client
+    response body:
+    {
+        "resultCode" : String
+        "resultData" : String
+    }
+end note
+@enduml

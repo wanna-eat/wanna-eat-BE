@@ -1,0 +1,21 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+participant Client
+participant AuthController
+participant AuthService
+participant JwtProvider
+participant UserRepository
+participant RedisTemplate
+autonumber
+== 회원가입 플로우 시작 ==
+
+Client -[#red]> AuthController: PATCH /api/v1/auth/signup (SignupRequest)
+AuthController -> AuthService: signup(SignupRequest)
+AuthService -> AuthService: checkDuplicateId(Id)
+AuthService -> AuthService: checkDuplicateNickname(Nickname)
+AuthService -> JwtProvider: createToken(Id)
+JwtProvider -> AuthService: TokenResponse
+AuthService -> AuthController: TokenResponse
+AuthController -[#blue]> Client: TokenResponse
+@enduml
