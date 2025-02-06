@@ -1,0 +1,44 @@
+@startuml
+class Client {
+}
+
+class AuthController {
+  +reissue(ReissueRequest): TokenResponse
+}
+
+class AuthService {
+  +reissue(ReissueRequest): TokenResponse
+  -validateToken(accessToken: String): boolean
+}
+
+class JwtProvider {
+  +validateToken(accessToken: String): boolean
+  +createToken(userId: String): TokenResponse
+}
+
+class UserRepository {
+  +findById(userId: String): User
+}
+
+class RedisTemplate {
+  +checkValidRefreshToken(refreshToken: String): boolean
+  +deleteRefreshToken(refreshToken: String)
+}
+
+class TokenResponse {
+  +resultCode: int
+  +resultData: String
+}
+
+Client --> AuthController : "POST /api/v1/auth/reissue"
+AuthController --> AuthService : "reissue(ReissueRequest)"
+AuthService --> JwtProvider : "validateToken(accessToken)"
+JwtProvider --> AuthService : "boolean"
+AuthService --> RedisTemplate : "checkValidRefreshToken(refreshToken)"
+RedisTemplate --> RedisTemplate : "deleteRefreshToken(refreshToken)"
+AuthService --> JwtProvider : "createToken(userId)"
+JwtProvider --> AuthService : "TokenResponse"
+AuthService --> AuthController : "TokenResponse"
+AuthController --> Client : "TokenResponse"
+
+@enduml
