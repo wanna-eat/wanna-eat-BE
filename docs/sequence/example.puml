@@ -1,0 +1,98 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+participant Client
+participant ChatServer
+participant PushServer
+participant Database
+
+autonumber
+== 사용자 채팅 저장 및 모든 사용자 에게 푸시 알림 전송 시나리오 시작 ==
+
+Client -[#red]> ChatServer: ChatRequest (AccessToken(사용자의 정보가 담긴 엑세스 토큰) / ChatPK(사용자가 속한 채팅방 아이디) / content(입력할 채팅 내용)
+
+note over Client, ChatServer
+    header: Authorization: Bearer {accessToken}
+    request body:
+    {
+        "chatPK" : "uuid",
+        "content" : "string"
+    }
+end note
+
+ChatServer -> ChatServer: AccessToken을 통해 userPK 가져오기
+ChatServer -> ChatServer: AccessToken을 통해 AppInfo 가져오기
+
+ChatServer -> Client: 유효하지 않는 토큰을 준 경우 에러 메시지 반환
+note over Client, ChatServer
+    response body:
+    {
+        "resultCode" : 10001
+        "resultData" : "유효하지 않는 엑세스 토큰입니다."
+    }
+end note
+
+ChatServer -> Client: 기한이 만료된 토큰을 준 경우 에러 메시지 반환
+
+note over Client, ChatServer
+    response body:
+    {
+        "resultCode" : 10002
+        "resultData" : "기한이 만료된 엑세스 토큰입니다. 재발급 요청이 필요합니다."
+    }
+end note
+
+ChatServer -> Database: user_chat_room에 existsby(userPK, chatPK) 쿼리 요청
+ChatServer -> Client: 해당 채팅방 없는 경우 에러 메시지 반환
+
+note over Client, ChatServer
+    response body:
+    {
+        "resultCode" : 10100
+        "resultData" : "해당 채팅방이 존재하지 않습니다."
+    }
+end note
+
+ChatServer -> Database: user_chat_room에 findUserBy(chatPK, userPk) 쿼리 요청
+Database -[#blue]> ChatServer: UserListRes: List(User) 채팅방에 존재하는 모든 유저 반환
+
+ChatServer -[#red]> Database: chatReq (chatPK, List(user), content) 채팅방에 존재하는 모든 유저에 메시지 저장
+ChatServer -> ChatServer: 각 유저의 (isCompletedOnboarding, nickname, email) 값 가져오기
+
+ChatServer -> ChatServer: 시간 측정 시작
+ChatServer -[#red]> PushServer: 비동기로 각 유저 정보가 담긴 PushRequest 요청
+
+note over ChatServer, PushServer
+    header: Authorization: Bearer {accessToken}
+    header: {AppInfo} PUSH_BROADCASTING
+    request body:
+    {
+        "isCompletedOnboarding" : "booleanEnum",
+        "nickname" : "string",
+        "email" : "string"
+    }
+end note
+PushServer -[#blue]> ChatServer: PushResponse
+note over ChatServer, PushServer
+    response body:
+    {
+        "resultCode" : "Int",
+        "resultData" : {
+            "isCompletedOnboarding" : "booleanEnum",
+            "nickname" : "string",
+            "email" : "string"
+        }
+    }
+end note
+ChatServer -> ChatServer: 시간 측정 완료
+ChatServer -[#blue]> Client: PushTimeRes
+note over Client, ChatServer
+    response body:
+    {
+        "resultCode" : "Int",
+        "resultData" : {
+            "time" : "Int"
+        }
+    }
+end note
+@enduml

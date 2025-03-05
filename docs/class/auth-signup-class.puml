@@ -1,0 +1,45 @@
+@startuml
+class Client {
+}
+
+class AuthController {
+  +login(LoginRequest): TokenResponse
+}
+
+class AuthService {
+  +login(LoginRequest): TokenResponse
+  -validateUser(id: String, password: String): boolean
+  -createToken(): TokenResponse
+}
+
+class UserRepository {
+  +findUserById(id: String): User
+}
+
+class RedisTemplate {
+  +setRefreshToken(refreshToken: String, refreshValidTime: long)
+}
+
+class TokenResponse {
+  +accessToken: String
+  +refreshToken: String
+  +accessValidTime: long
+  +refreshValidTime: long
+}
+
+class ErrorResponse {
+  +resultCode: String
+  +resultData: String
+}
+
+Client --> AuthController : "POST /api/v1/auth/signup"
+AuthController --> AuthService : "login(LoginRequest)"
+AuthService --> AuthService : "validateUser(id, password)"
+AuthService --> UserRepository : "findUserById(id)"
+UserRepository --> AuthService : "User"
+AuthService --> AuthService : "isMatchesPassword(User.getID(), password)"
+AuthService --> Client : "ErrorResponse"
+AuthService --> RedisTemplate : "setRefreshToken(refreshToken, refresh_valid_time)"
+AuthService --> AuthController : "TokenResponse"
+AuthController --> Client : "TokenResponse"
+@enduml

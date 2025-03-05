@@ -1,0 +1,44 @@
+@startuml
+class Client {
+}
+
+class AuthController {
+  +logout(LogoutRequest): void
+}
+
+class AuthService {
+  +logout(LogoutRequest): void
+  -ValidToken(accessToken: String, refreshToken: String): boolean
+}
+
+class JwtProvider {
+  +ValidToken(accessToken: String, refreshToken: String): boolean
+  +revokeToken(accessToken: String)
+}
+
+class UserRepository {
+  +findUserById(id: String): User
+}
+
+class RedisTemplate {
+  +setBlackListRefreshToken(refreshToken: String)
+}
+
+class LogoutRequest {
+  +refreshToken: String
+}
+
+class TokenResponse {
+  +resultCode: String
+  +resultData: String
+}
+
+Client --> AuthController : "PATCH /api/v1/auth/logout"
+AuthController --> AuthService : "logout(LogoutRequest)"
+AuthService --> JwtProvider : "ValidToken(accessToken, refreshToken)"
+JwtProvider --> AuthService : "boolean"
+AuthService --> RedisTemplate : "setBlackListRefreshToken(refreshToken)"
+AuthService --> JwtProvider : "revokeToken(accessToken)"
+AuthService --> AuthController : "void"
+AuthController --> Client : "TokenResponse"
+@enduml

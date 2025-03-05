@@ -1,0 +1,40 @@
+@startuml
+class Client {
+}
+
+class AuthController {
+  +deactivate(accessToken: String): void
+}
+
+class AuthService {
+  +deactivate(accessToken: String): void
+  -validateToken(accessToken: String): boolean
+  -setDeleteUser(user: User)
+}
+
+class UserRepository {
+  +findUserById(id: String): User
+  +deleteUser(user: User): void
+}
+
+class JwtProvider {
+  +validateToken(accessToken: String): boolean
+}
+
+class User {
+  +id: String
+  +name: String
+}
+
+class TokenResponse {
+  +resultCode: String
+  +resultData: String
+}
+
+Client --> AuthController : "PATCH /api/v1/auth/deactivate"
+AuthController --> AuthService : "deactivate(accessToken)"
+AuthService --> JwtProvider : "validateToken(accessToken)"
+AuthService --> AuthService : "setDeleteUser(User)"
+AuthService --> AuthController : "void"
+AuthController --> Client : "TokenResponse"
+@enduml
