@@ -24,25 +24,30 @@ repositories {
 }
 
 dependencies {
-    //jwt
+    // jwt
     implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
     implementation 'io.jsonwebtoken:jjwt-impl:0.12.3'
     implementation 'io.jsonwebtoken:jjwt-jackson:0.12.3'
-    //security
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    //dbms
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // security
+
+    // database (R2DBC & Redis)
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-    runtimeOnly 'com.h2database:h2'
-    runtimeOnly 'com.mysql:mysql-connector-j'
-    //lombok
+    implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
+    implementation 'org.postgresql:r2dbc-postgresql:1.0.7.RELEASE'
+
+    // lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
-    //spring
-    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // spring
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+    // test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'io.projectreactor:reactor-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
