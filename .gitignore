@@ -4,6 +4,12 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+src/main/resources/application.yml
+.DS_Store
+._.DS_Store
+**/.DS_Store
+**/._.DS_Store
+resources/
 
 ### STS ###
 .apt_generated
