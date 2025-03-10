@@ -2,6 +2,8 @@ package com.wannaeat.domain.member.presentation;
 
 import com.wannaeat.domain.member.application.MemberService;
 import com.wannaeat.domain.member.domain.Member;
+import com.wannaeat.domain.member.domain.dto.reqeust.MemberCreateRequest;
+import com.wannaeat.domain.member.domain.dto.response.MemberCreateResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -10,15 +12,16 @@ import reactor.core.publisher.Flux;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/members")
+@RequestMapping("/api/v1/members")
 public class MemberController {
 
     private final MemberService memberService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<Member> create(@RequestBody Member member) {
-        return memberService.save(member);
+    public Mono<MemberCreateResponse> create(@RequestBody MemberCreateRequest memberCreateRequest) {
+        return memberService.create(memberCreateRequest)
+                .map(MemberCreateResponse::from);
     }
 
     @GetMapping("/{id}")
