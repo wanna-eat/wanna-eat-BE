@@ -1,9 +1,9 @@
-package com.wannaeat.global.config;
+package com.wannaeat.infrastructure.config;
 
-import com.wannaeat.domain.member.infrastructure.MemberRepository;
-import com.wannaeat.global.util.CustomUserDetails;
-import com.wannaeat.global.util.JWTUtil;
-import com.wannaeat.global.util.JwtAuthenticationFilter;
+import com.wannaeat.application.port.outbound.MemberRepository;
+import com.wannaeat.infrastructure.util.CustomUserDetails;
+import com.wannaeat.infrastructure.util.JWTUtil;
+import com.wannaeat.infrastructure.util.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;

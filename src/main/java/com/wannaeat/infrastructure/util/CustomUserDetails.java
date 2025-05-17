@@ -1,6 +1,6 @@
-package com.wannaeat.global.util;
+package com.wannaeat.infrastructure.util;
 
-import com.wannaeat.domain.member.domain.Member;
+import com.wannaeat.domain.model.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -11,7 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
 
-import static com.wannaeat.domain.member.domain.MemberRole.*;
+import static com.wannaeat.domain.model.MemberRole.ROLE_USER;
 
 @Getter
 @NoArgsConstructor
