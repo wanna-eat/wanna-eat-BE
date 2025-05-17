@@ -1,40 +1,34 @@
-package com.wannaeat.domain.model;
+package com.wannaeat.domain.member.domain;
 
-
-import lombok.Builder;
-import lombok.Getter;
-import org.springframework.data.annotation.CreatedDate;
+import com.wannaeat.domain.member.domain.dto.vo.*;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.relational.core.mapping.Table;
+import lombok.*;
 
-import java.time.LocalDateTime;
-
-@Table("member")
+@Table(name = "member") // 실제 테이블명이 'member'이므로 소문자 사용
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class Member {
 
     @Id
-    private Long memberId;
+    private Long id;
 
     private String loginId;
 
     private String password;
 
+    private String name;
+
+    private Gender gender; // Enum 저장은 String 기반 수동 처리 필요
+
     private Long deptId;
 
-    private String nickname;
+    private RestaurantType restaurantType;
+    private RestaurantMood restaurantMood;
+    private MealType mealType;
+    private RestaurantSize restaurantSize;
 
-    private String gender;
-
-    private String image;
-
-    private Long companyId;
-
-    @CreatedDate
-    private LocalDateTime createdDate;
-
-    @LastModifiedDate
-    private LocalDateTime modifiedDate;
+    private String cafeBrand;
 }
