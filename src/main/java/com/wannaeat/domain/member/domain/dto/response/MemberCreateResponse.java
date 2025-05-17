@@ -8,6 +8,6 @@ public record MemberCreateResponse(
         @NotBlank String username
 ) {
     public static MemberCreateResponse from(Member member) {
-        return new MemberCreateResponse(member.getMemberId(), member.getNickname());
+        return new MemberCreateResponse(member.getId(), member.getName());
     }
 }

@@ -2,7 +2,7 @@ package com.wannaeat.domain.member.presentation;
 
 import com.wannaeat.domain.member.application.MemberService;
 import com.wannaeat.domain.member.domain.Member;
-import com.wannaeat.domain.member.domain.dto.reqeust.MemberCreateRequest;
+import com.wannaeat.domain.member.domain.dto.request.MemberCreateRequest;
 import com.wannaeat.domain.member.domain.dto.response.MemberCreateResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

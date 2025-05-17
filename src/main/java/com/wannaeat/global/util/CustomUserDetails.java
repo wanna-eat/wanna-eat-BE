@@ -24,7 +24,7 @@ public class CustomUserDetails implements UserDetails {
     private String password;
 
     public static CustomUserDetails of(Member member) {
-        return new CustomUserDetails(member.getMemberId(), member.getNickname(), String.valueOf(ROLE_USER), member.getPassword());
+        return new CustomUserDetails(member.getId(), member.getName(), String.valueOf(ROLE_USER), member.getPassword());
     }
 
     public static CustomUserDetails of(Long memberId) {
