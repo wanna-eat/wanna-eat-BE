@@ -1,4 +1,4 @@
-package com.wannaeat.domain.restuarant.domain.dto;
+package com.wannaeat.domain.restuarant.domain.dto.response;
 
 import com.wannaeat.domain.restuarant.domain.Restaurant;
 import lombok.AllArgsConstructor;
